@@ -7,7 +7,13 @@ body {
   padding: 2rem;
 }
 
-h1, h2, h3, h4, h5, h6, span, div, section {
+:host {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+h1, h2, h3, h4, h5, h6, p, span, div, section, label {
   color: white;
 }
 
