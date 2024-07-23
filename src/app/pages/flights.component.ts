@@ -6,7 +6,7 @@ import { FlightCard } from '../components/flight-card.component';
 @Component({
   selector: 'app-flights',
   template: `
-    <div class="flights-container">
+    <div class="flights-container" style="margin-top: 2rem">
       @for (flight of flights; track flight.id) {
         <flight-card [flight]="flight" />
       }

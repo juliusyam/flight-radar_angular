@@ -2,24 +2,32 @@ import { Component } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { AuthService } from './services/authService';
 import { UserResponse } from './models/responses';
+import { MatToolbar, MatToolbarRow } from '@angular/material/toolbar';
+import { MatButton } from '@angular/material/button';
 
 @Component({
   selector: 'app-root',
   template: `
-    <h1>Flight Radar - Laravel</h1>
-    @if (isAuthenticated) {
-      <nav>
-        <a routerLink="/dashboard">Dashboard</a>
-        |
-        <a routerLink="/flights">Flights</a>
-      </nav>
+    <div style="display: flex; justify-content: space-between; align-items: center">
+      <h1 style="margin: 0; font-size: xx-large; font-weight: bolder">
+        Flight Radar - Laravel
+      </h1>
 
-      <button (click)="onLogout()">Logout</button>
+      @if (isAuthenticated) {
+        <button mat-button (click)="onLogout()">Logout</button>
+      }
+    </div>
+
+    @if (isAuthenticated) {
+      <mat-toolbar color="primary" style="gap: 1rem">
+        <a routerLink="/dashboard">Dashboard</a>
+        <a routerLink="/flights">Flights</a>
+      </mat-toolbar>
     }
     <router-outlet />
   `,
   standalone: true,
-  imports: [RouterLink, RouterOutlet],
+  imports: [RouterLink, RouterOutlet, MatToolbar, MatToolbarRow, MatButton],
 })
 export class AppComponent {
 
