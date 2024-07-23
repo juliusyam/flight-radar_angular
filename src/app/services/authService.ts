@@ -1,8 +1,7 @@
-import { Injectable } from '@angular/core';
+import { EventEmitter, Injectable, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { LoginPayload } from '../models/payloads';
-import { UserResponse } from '../models/responses';
-import { map, Observable } from 'rxjs';
+import { User, UserResponse } from '../models/responses';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
@@ -12,13 +11,56 @@ export class AuthService {
 
   constructor(private httpClient: HttpClient) {}
 
-  login(payload: LoginPayload): Observable<UserResponse> {
-    return this.httpClient.post<UserResponse>('http://localhost:8000/api/login', payload);
+  @Output() userProvided: EventEmitter<UserResponse> = new EventEmitter<UserResponse>();
+  @Output() userRemoved: EventEmitter<null> = new EventEmitter<null>();
+
+  login(payload: LoginPayload, onSuccess: (response: UserResponse) => void) {
+    this.httpClient.post<UserResponse>('http://localhost:8000/api/login', payload)
+      .subscribe(response => {
+        console.log(response);
+        this.setUser(response);
+        onSuccess(response);
+      });
+  }
+
+  logout(onSuccess: () => void) {
+    this.removeUser();
+    onSuccess();
   }
 
   public isAuthenticated(): boolean {
-    const token = localStorage.getItem('token');
-    const isExpired = new JwtHelperService().isTokenExpired(token);
+    const user = this.getUser();
+
+    const isExpired = new JwtHelperService().isTokenExpired(user?.token ?? null);
+
+    if (!user || isExpired) {
+      this.userRemoved.emit(null);
+    } else {
+      this.userProvided.emit(user);
+    }
+
     return !isExpired;
+  }
+
+  private setUser(response: UserResponse) {
+    localStorage.setItem('token', response.token);
+    localStorage.setItem('user', JSON.stringify(response.user));
+    this.userProvided.emit(response);
+  }
+
+  private getUser(): UserResponse | null {
+     const token = localStorage.getItem('token');
+     const userString = localStorage.getItem('user');
+
+     if (!token || !userString) return null;
+
+     const user = JSON.parse(userString) as User;
+     return { token, user };
+  }
+
+  private removeUser() {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    this.userRemoved.emit(null);
   }
 }
