@@ -1,12 +1,21 @@
 import { Component } from '@angular/core';
-import { Flight, FlightStats } from '../models/responses';
+import { Flight } from '../models/responses';
 import { DashboardService } from '../services/dashboardService';
+import { FlightCard } from '../components/flight-card.component';
 
 @Component({
   selector: 'app-flights',
-  template: `<p>Flights Page</p>`,
+  template: `
+    <div class="flights-container">
+      @for (flight of flights; track flight.id) {
+        <flight-card [flight]="flight" />
+      }
+    </div>
+  `,
   standalone: true,
-  imports: [],
+  imports: [
+    FlightCard
+  ],
 })
 export class FlightsPage {
   flights: Flight[] = [];
