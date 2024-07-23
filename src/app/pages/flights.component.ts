@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Flight } from '../models/responses';
+import { Flight, FlightStats } from '../models/responses';
 import { DashboardService } from '../services/dashboardService';
 
 @Component({
@@ -16,6 +16,5 @@ export class FlightsPage {
       this.flights = flights;
     });
   }
-
 
 }

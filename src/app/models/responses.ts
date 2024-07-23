@@ -24,3 +24,10 @@ export interface Flight {
   updated_at: Date,
   user_id: number,
 }
+
+export interface FlightStats {
+  total_flights: number,
+  total_distance: number,
+  top_airports: Record<string, number>,
+  top_airlines: Record<string, number>
+}
