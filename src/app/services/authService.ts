@@ -48,7 +48,7 @@ export class AuthService {
     this.userProvided.emit(response);
   }
 
-  private getUser(): UserResponse | null {
+  public getUser(): UserResponse | null {
      const token = localStorage.getItem('token');
      const userString = localStorage.getItem('user');
 

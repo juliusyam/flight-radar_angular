@@ -11,3 +11,16 @@ export interface User {
   created_at: Date,
   updated_at?: Date,
 }
+
+export interface Flight {
+  id: number,
+  departure_date: string,
+  flight_number: string,
+  departure_airport: string,
+  arrival_airport: string,
+  distance: number,
+  airline: string,
+  created_at: Date,
+  updated_at: Date,
+  user_id: number,
+}
