@@ -14,7 +14,7 @@ export interface User {
 
 export interface Flight {
   id: number,
-  departure_date: string,
+  departure_date: Date,
   flight_number: string,
   departure_airport: string,
   arrival_airport: string,

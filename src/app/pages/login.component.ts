@@ -22,7 +22,7 @@ import { MatCard, MatCardContent } from '@angular/material/card';
               <mat-label>Password</mat-label>
               <input type="password" placeholder="Password" formControlName="password" name="password" matInput />
             </mat-form-field>
-            <button mat-button type="submit" [disabled]="!loginForm.valid">Submit</button>
+            <button mat-flat-button type="submit" [disabled]="!loginForm.valid">Submit</button>
           </form>
         </mat-card-content>
       </mat-card>

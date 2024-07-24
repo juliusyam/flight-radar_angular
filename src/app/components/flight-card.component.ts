@@ -24,7 +24,7 @@ import { MatButton } from '@angular/material/button';
           </mat-card-subtitle>
         </mat-card-content>
         <mat-card-actions>
-          <button mat-button>View more</button>
+          <button mat-raised-button>View more</button>
         </mat-card-actions>
       </mat-card>
     }
@@ -41,6 +41,4 @@ import { MatButton } from '@angular/material/button';
 })
 export class FlightCard {
   @Input() flight: Flight | undefined = undefined;
-
-  constructor() {}
 }

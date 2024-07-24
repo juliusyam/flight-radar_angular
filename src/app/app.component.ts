@@ -14,7 +14,7 @@ import { MatButton } from '@angular/material/button';
       </h1>
 
       @if (isAuthenticated) {
-        <button mat-button (click)="onLogout()">Logout</button>
+        <button mat-stroked-button (click)="onLogout()">Logout</button>
       }
     </div>
 
