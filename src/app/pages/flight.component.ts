@@ -18,8 +18,8 @@ export class FlightDetailsPage {
   flight: Flight | undefined = undefined;
 
   constructor(private route: ActivatedRoute, dashboardService: DashboardService) {
-    this.route.params.subscribe(param => {
-      this.flight = dashboardService.getFlightById(parseInt(param['id'], 10));
+    this.route.params.subscribe(async param => {
+      this.flight = await dashboardService.getFlightById(parseInt(param['id'], 10));
     });
   }
 }

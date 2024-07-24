@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, lastValueFrom } from 'rxjs';
 import { Flight, FlightStats } from '../models/responses';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from './authService';
@@ -36,8 +36,15 @@ export class DashboardService {
       });
   }
 
-  getFlightById(flightId: number): Flight | undefined {
-    return this.flightsSubject.value.find(f => f.id === flightId);
+  async getFlightById(flightId: number): Promise<Flight> {
+    const flight = this.flightsSubject.value.find(f => f.id === flightId);
+
+    if (flight) {
+      return flight;
+    } else {
+      const getFlight$= this.httpClient.get<Flight>(`http://localhost:8000/api/flights/${ flightId }`, { headers: this.headers });
+      return await lastValueFrom(getFlight$);
+    }
   }
 
   addFlight(payload: FlightPayload) {
