@@ -36,6 +36,10 @@ export class DashboardService {
       });
   }
 
+  getFlightById(flightId: number): Flight | undefined {
+    return this.flightsSubject.value.find(f => f.id === flightId);
+  }
+
   addFlight(payload: FlightPayload) {
     this.httpClient.post<Flight>('http://localhost:8000/api/flights', payload, { headers: this.headers })
       .subscribe(response => {

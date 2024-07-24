@@ -4,6 +4,7 @@ import { DashboardPage } from './pages/dashboard.component';
 import { FlightsPage } from './pages/flights.component';
 import { AuthGuard } from './services/authGuard';
 import { LoginAuthGuard } from './services/loginAuthGuard';
+import { FlightDetailsPage } from './pages/flight.component';
 
 export const routes: Routes = [
   {
@@ -22,6 +23,12 @@ export const routes: Routes = [
     path: 'flights',
     title: 'Flights Page',
     component: FlightsPage,
+    canActivate: [AuthGuard],
+  },
+  {
+    path: 'flight/:id',
+    title: 'Flight Details age',
+    component: FlightDetailsPage,
     canActivate: [AuthGuard],
   }
 ];

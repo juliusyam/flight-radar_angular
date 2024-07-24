@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { FlightFormGroup, FlightPayload } from '../models/payloads';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormField, MatHint, MatLabel } from '@angular/material/form-field';
@@ -11,6 +11,7 @@ import {
 import { MatNativeDateModule, provideNativeDateAdapter } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButton } from '@angular/material/button';
+import { Flight } from '../models/responses';
 
 @Component({
   selector: 'flight-form',
@@ -74,15 +75,16 @@ import { MatButton } from '@angular/material/button';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FlightForm {
+  @Input() flight: Flight | null = null;
   @Output() handleSubmit: EventEmitter<FlightPayload> = new EventEmitter<FlightPayload>();
 
   flightForm = new FormGroup<FlightFormGroup>({
-    departure_date: new FormControl(new Date(), { nonNullable: true, validators: [Validators.required] }),
-    flight_number: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(3)] }),
-    departure_airport: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(3)] }),
-    arrival_airport: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(3)] }),
-    distance: new FormControl(0, { nonNullable: true, validators: [Validators.required, Validators.min(0)] }),
-    airline: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(3)] })
+    departure_date: new FormControl(this.flight?.departure_date ?? new Date(), { nonNullable: true, validators: [Validators.required] }),
+    flight_number: new FormControl(this.flight?.flight_number ?? '', { nonNullable: true, validators: [Validators.required, Validators.minLength(3)] }),
+    departure_airport: new FormControl(this.flight?.departure_airport ?? '', { nonNullable: true, validators: [Validators.required, Validators.minLength(3)] }),
+    arrival_airport: new FormControl(this.flight?.arrival_airport ?? '', { nonNullable: true, validators: [Validators.required, Validators.minLength(3)] }),
+    distance: new FormControl(this.flight?.distance ?? 0, { nonNullable: true, validators: [Validators.required, Validators.min(0)] }),
+    airline: new FormControl(this.flight?.airline ?? '', { nonNullable: true, validators: [Validators.required, Validators.minLength(3)] })
   });
 
   onSubmit() {

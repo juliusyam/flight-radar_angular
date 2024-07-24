@@ -19,7 +19,7 @@ import { MatButton } from '@angular/material/button';
     </div>
 
     @if (isAuthenticated) {
-      <mat-toolbar color="primary" style="gap: 1rem">
+      <mat-toolbar color="primary" style="gap: 1rem; margin-bottom: 2rem;">
         <a routerLink="/dashboard">Dashboard</a>
         <a routerLink="/flights">Flights</a>
       </mat-toolbar>
