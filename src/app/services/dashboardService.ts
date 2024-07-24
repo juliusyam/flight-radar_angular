@@ -25,34 +25,33 @@ export class DashboardService {
 
     this.httpClient.get<Flight[]>('http://localhost:8000/api/flights', { headers: this.headers })
       .subscribe(response => {
-        console.log(response);
         this.flightsSubject.next(response);
       });
 
     this.httpClient.get<FlightStats>('http://localhost:8000/api/flight-stats', { headers: this.headers })
       .subscribe(response => {
-        console.log(response);
         this.flightStatsSubject.next(response);
       });
-  }
-
-  async getFlightById(flightId: number): Promise<Flight> {
-    const flight = this.flightsSubject.value.find(f => f.id === flightId);
-
-    if (flight) {
-      return flight;
-    } else {
-      const getFlight$= this.httpClient.get<Flight>(`http://localhost:8000/api/flights/${ flightId }`, { headers: this.headers });
-      return await lastValueFrom(getFlight$);
-    }
   }
 
   addFlight(payload: FlightPayload) {
     this.httpClient.post<Flight>('http://localhost:8000/api/flights', payload, { headers: this.headers })
       .subscribe(response => {
-        console.log(response);
         const flights = this.flightsSubject.value;
         flights.push(response);
+        this.flightsSubject.next(flights);
+      });
+  }
+
+  editFlight(flightId: number, payload: FlightPayload) {
+    this.httpClient.put<Flight>(`http://localhost:8000/api/flights/ ${ flightId }`, payload, { headers: this.headers })
+      .subscribe(response => {
+        const flights = this.flightsSubject.value;
+
+        const index = flights.findIndex(f => f.id === response.id);
+
+        flights.splice(index, 1, response);
+
         this.flightsSubject.next(flights);
       });
   }

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, SimpleChanges } from '@angular/core';
 import { FlightFormGroup, FlightPayload } from '../models/payloads';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormField, MatHint, MatLabel } from '@angular/material/form-field';
@@ -52,7 +52,7 @@ import { Flight } from '../models/responses';
         <input type="text" placeholder="e.g. RYR" formControlName="airline" name="airline" matInput />
       </mat-form-field>
 
-      <button mat-flat-button type="submit" [disabled]="!flightForm.valid">Create Flight Entry</button>
+      <button mat-flat-button type="submit" [disabled]="!flightForm.valid">Submit</button>
     </form>
   `,
   standalone: true,
@@ -75,17 +75,32 @@ import { Flight } from '../models/responses';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FlightForm {
-  @Input() flight: Flight | null = null;
+  @Input() flight: Flight | undefined = undefined;
   @Output() handleSubmit: EventEmitter<FlightPayload> = new EventEmitter<FlightPayload>();
 
   flightForm = new FormGroup<FlightFormGroup>({
-    departure_date: new FormControl(this.flight?.departure_date ?? new Date(), { nonNullable: true, validators: [Validators.required] }),
-    flight_number: new FormControl(this.flight?.flight_number ?? '', { nonNullable: true, validators: [Validators.required, Validators.minLength(3)] }),
-    departure_airport: new FormControl(this.flight?.departure_airport ?? '', { nonNullable: true, validators: [Validators.required, Validators.minLength(3)] }),
-    arrival_airport: new FormControl(this.flight?.arrival_airport ?? '', { nonNullable: true, validators: [Validators.required, Validators.minLength(3)] }),
-    distance: new FormControl(this.flight?.distance ?? 0, { nonNullable: true, validators: [Validators.required, Validators.min(0)] }),
-    airline: new FormControl(this.flight?.airline ?? '', { nonNullable: true, validators: [Validators.required, Validators.minLength(3)] })
+    departure_date: new FormControl(new Date(), { nonNullable: true, validators: [Validators.required] }),
+    flight_number: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(3)] }),
+    departure_airport: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(3)] }),
+    arrival_airport: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(3)] }),
+    distance: new FormControl(0, { nonNullable: true, validators: [Validators.required, Validators.min(0)] }),
+    airline: new FormControl('', { nonNullable: true, validators: [Validators.required, Validators.minLength(3)] })
   });
+
+  ngOnChanges(changes: SimpleChanges) {
+    const flightCurrentValue = changes['flight'].currentValue as Flight | undefined;
+
+    if (flightCurrentValue) {
+      this.flightForm.setValue({
+        departure_date: flightCurrentValue.departure_date,
+        flight_number: flightCurrentValue.flight_number,
+        departure_airport: flightCurrentValue.departure_airport,
+        arrival_airport: flightCurrentValue.arrival_airport,
+        distance: flightCurrentValue.distance,
+        airline: flightCurrentValue.airline,
+      });
+    }
+  }
 
   onSubmit() {
     this.handleSubmit.emit(this.flightForm.value);

@@ -17,7 +17,6 @@ export class AuthService {
   login(payload: LoginPayload, onSuccess: (response: UserResponse) => void) {
     this.httpClient.post<UserResponse>('http://localhost:8000/api/login', payload)
       .subscribe(response => {
-        console.log(response);
         this.setUser(response);
         onSuccess(response);
       });
