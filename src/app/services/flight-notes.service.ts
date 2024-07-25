@@ -12,7 +12,7 @@ export class FlightNotesService {
   private notesSubject = new BehaviorSubject<Note[]>([]);
   notesObservable = this.notesSubject.asObservable();
 
-  private headers = new HttpHeaders();
+  private readonly headers = new HttpHeaders();
 
   constructor(private httpClient: HttpClient, authService: AuthService) {
     const token = authService.getUser()?.token;
@@ -44,8 +44,22 @@ export class FlightNotesService {
     this.httpClient.post<Note>(`http://localhost:8000/api/notes`, { ...payload, flight_id: this.currentFlightId }, { headers: this.headers })
       .subscribe(note => {
         const notes = this.notesSubject.value;
+
         notes.push(note);
+
         this.notesSubject.next(notes);
       });
+  }
+
+  editNote(noteId: number, payload: NotePayload) {
+    this.httpClient.put<Note>(`http://localhost:8000/api/notes/${ noteId }`, payload, { headers: this.headers })
+      .subscribe(note => {
+        const notes = this.notesSubject.value;
+
+        const index = notes.findIndex(n => n.id === note.id);
+        if (index >= 0) notes.splice(index, 1, note);
+
+        this.notesSubject.next(notes);
+      })
   }
 }
