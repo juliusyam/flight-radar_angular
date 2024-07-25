@@ -23,10 +23,6 @@ export interface FlightFormGroup {
   airline: FormControl<string>,
 }
 
-export interface NoteCreatePayload extends NotePayload {
-  flight_id?: number,
-}
-
 export interface NotePayload {
   title?: string,
   body?: string,

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FlightNotesService } from '../services/flight-notes.service';
 import { Note } from '../models/responses';
 import { NoteCard } from '../components/note-card.component';
@@ -6,6 +6,8 @@ import { ActivatedRoute } from '@angular/router';
 import { NoteForm } from '../components/note-form.component';
 import { NotePayload } from '../models/payloads';
 import { MatCard, MatCardContent } from '@angular/material/card';
+import { MatDialog } from '@angular/material/dialog';
+import { NoteFormDialog } from '../components/note-form-dialog.component';
 
 @Component({
   selector: 'app-notes',
@@ -20,7 +22,7 @@ import { MatCard, MatCardContent } from '@angular/material/card';
 
     <section style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
       @for (note of notes; track note.id) {
-        <note-card [note]="note" />
+        <note-card [note]="note" (handleClick)="expandNote($event)" />
       }
     </section>
   `,
@@ -35,6 +37,8 @@ import { MatCard, MatCardContent } from '@angular/material/card';
 export class NotesPage {
   notes: Note[] = [];
 
+  readonly dialog = inject(MatDialog);
+
   constructor(private route: ActivatedRoute, private notesService: FlightNotesService) {
     this.route.params.subscribe(async param => {
       const flightId = parseInt(param['id'], 10);
@@ -47,5 +51,17 @@ export class NotesPage {
 
   createNote(payload: NotePayload) {
     this.notesService.addNote(payload);
+  }
+
+  expandNote(note: Note) {
+    const dialogRef = this.dialog.open(NoteFormDialog, {
+      data: {
+        note,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(payload => {
+      if (payload) this.notesService.editNote(note.id, payload);
+    });
   }
 }

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Note } from '../models/responses';
 import { MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle } from '@angular/material/card';
 
@@ -6,7 +6,7 @@ import { MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle }
   selector: 'note-card',
   template: `
     @if (note) {
-      <mat-card appearance="outlined">
+      <mat-card appearance="outlined" (click)="onClick()">
         <mat-card-header>
           {{ note.id }}
         </mat-card-header>
@@ -33,4 +33,9 @@ import { MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle }
 })
 export class NoteCard {
   @Input() note: Note | undefined = undefined;
+  @Output() handleClick: EventEmitter<Note> = new EventEmitter<Note>();
+
+  onClick() {
+    if (this.note) this.handleClick.emit(this.note);
+  }
 }
