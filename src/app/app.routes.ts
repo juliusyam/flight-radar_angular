@@ -5,6 +5,8 @@ import { FlightsPage } from './pages/flights.component';
 import { AuthGuard } from './services/authGuard';
 import { LoginAuthGuard } from './services/loginAuthGuard';
 import { FlightDetailsPage } from './pages/flight.component';
+import { NotesPage } from './pages/notes.component';
+import { FlightNotesService } from './services/flight-notes.service';
 
 export const routes: Routes = [
   {
@@ -27,8 +29,17 @@ export const routes: Routes = [
   },
   {
     path: 'flight/:id',
-    title: 'Flight Details age',
-    component: FlightDetailsPage,
+    children: [
+      {
+        path: '',
+        component: FlightDetailsPage,
+      },
+      {
+        path: 'notes',
+        component: NotesPage,
+      },
+    ],
     canActivate: [AuthGuard],
+    providers: [FlightNotesService]
   }
 ];

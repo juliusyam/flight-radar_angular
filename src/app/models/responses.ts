@@ -31,3 +31,12 @@ export interface FlightStats {
   top_airports: Record<string, number>,
   top_airlines: Record<string, number>
 }
+
+export interface Note {
+  id: number,
+  title: string,
+  body: string,
+  user_id: number,
+  flight_id: number,
+  flight?: Flight,
+}

@@ -15,7 +15,7 @@ export class DashboardService {
   private flightStatsSubject = new BehaviorSubject<FlightStats | null>(null);
   flightsStatsObservable = this.flightStatsSubject.asObservable();
 
-  headers = new HttpHeaders();
+  private headers = new HttpHeaders();
 
   constructor(private httpClient: HttpClient, authService: AuthService) {
     const token = authService.getUser()?.token;
@@ -44,7 +44,7 @@ export class DashboardService {
   }
 
   editFlight(flightId: number, payload: FlightPayload) {
-    this.httpClient.put<Flight>(`http://localhost:8000/api/flights/ ${ flightId }`, payload, { headers: this.headers })
+    this.httpClient.put<Flight>(`http://localhost:8000/api/flights/${ flightId }`, payload, { headers: this.headers })
       .subscribe(response => {
         const flights = this.flightsSubject.value;
 

@@ -22,3 +22,14 @@ export interface FlightFormGroup {
   distance: FormControl<number>,
   airline: FormControl<string>,
 }
+
+export interface NoteCreatePayload {
+  title: string,
+  body: string,
+  flight_id: number,
+}
+
+export interface NoteEditPayload {
+  title: string,
+  body: string,
+}
