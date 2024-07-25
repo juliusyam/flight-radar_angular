@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, lastValueFrom } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { Flight, FlightStats } from '../models/responses';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AuthService } from './authService';
+import { AuthService } from './auth.service';
 import { FlightPayload } from '../models/payloads';
 
 @Injectable({

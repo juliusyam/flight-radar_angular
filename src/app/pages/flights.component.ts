@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Flight } from '../models/responses';
-import { DashboardService } from '../services/dashboardService';
+import { DashboardService } from '../services/dashboard.service';
 import { FlightCard } from '../components/flight-card.component';
 import { FlightForm } from '../components/flight-form.component';
 import { FlightPayload } from '../models/payloads';

@@ -2,7 +2,7 @@ import { Inject, Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { Note } from '../models/responses';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { AuthService } from './authService';
+import { AuthService } from './auth.service';
 
 @Injectable()
 export class FlightNotesService {

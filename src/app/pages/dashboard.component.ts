@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Flight, FlightStats } from '../models/responses';
-import { DashboardService } from '../services/dashboardService';
+import { DashboardService } from '../services/dashboard.service';
 import { MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle } from '@angular/material/card';
 import { FlightStatsColumn } from '../components/flight-stats-column.component';
 import dayjs from 'dayjs';

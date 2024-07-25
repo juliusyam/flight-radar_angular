@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DashboardService } from '../services/dashboardService';
+import { DashboardService } from '../services/dashboard.service';
 import { Flight, Note } from '../models/responses';
 import { FlightCard } from '../components/flight-card.component';
 import { FlightForm } from '../components/flight-form.component';
