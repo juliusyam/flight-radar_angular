@@ -9,6 +9,7 @@ import { MatCard, MatCardContent } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { NoteFormDialog } from '../components/note-form-dialog.component';
 import { NoteFormDialogOperation } from '../middleware/enum';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-notes',
@@ -40,7 +41,11 @@ export class NotesPage {
 
   readonly dialog = inject(MatDialog);
 
-  constructor(private route: ActivatedRoute, private notesService: FlightNotesService) {
+  constructor(
+    private route: ActivatedRoute,
+    private notesService: FlightNotesService,
+    private snackBar: MatSnackBar,
+  ) {
     this.route.params.subscribe(async param => {
       const flightId = parseInt(param['id'], 10);
 
@@ -68,7 +73,9 @@ export class NotesPage {
             this.notesService.editNote(note.id, result.payload);
             break;
           case NoteFormDialogOperation.OnDelete:
-            this.notesService.deleteNote(note.id);
+            this.notesService.deleteNote(note.id, () => {
+              this.snackBar.open(`Flight with id ${ note.id } successfully deleted`, 'Okay')
+            });
             break;
         }
       }

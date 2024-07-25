@@ -8,6 +8,7 @@ import { FlightPayload } from '../models/payloads';
 import { FlightNotesService } from '../services/flight-notes.service';
 import { NoteCard } from '../components/note-card.component';
 import { MatButton } from '@angular/material/button';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-flight',
@@ -47,6 +48,7 @@ import { MatButton } from '@angular/material/button';
 export class FlightDetailsPage {
   flightId: number | undefined;
   flight: Flight | undefined = undefined;
+
   notes: Note[] = [];
 
   constructor(
@@ -54,6 +56,7 @@ export class FlightDetailsPage {
     private route: ActivatedRoute,
     private dashboardService: DashboardService,
     private notesService: FlightNotesService,
+    private snackBar: MatSnackBar,
   ) {
     this.route.params.subscribe(async param => {
       const flightId = parseInt(param['id'], 10);
@@ -75,7 +78,9 @@ export class FlightDetailsPage {
   }
 
   deleteFlight() {
-    if (this.flightId) this.dashboardService.deleteFlight(this.flightId);
+    if (this.flightId) this.dashboardService.deleteFlight(this.flightId, () => {
+      this.snackBar.open(`Flight with id ${ this.flightId } successfully deleted`, 'Okay');
+    });
   }
 
   viewNotes() {

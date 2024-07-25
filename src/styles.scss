@@ -26,8 +26,10 @@ a {
   }
 }
 
-.flights-container {
-  display: grid;
-  gap: 1rem;
-  grid-template-columns: repeat(3, 1fr);
+.mat-mdc-snack-bar-container .mat-mdc-snackbar-surface {
+  background-color: #171717 !important;
+}
+
+.mat-mdc-snack-bar-container .mat-mdc-snack-bar-action .mdc-button__label {
+  color: aquamarine !important;
 }
