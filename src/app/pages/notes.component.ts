@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FlightNotesService } from '../services/flight-notes.service';
 import { Note } from '../models/responses';
 import { NoteCard } from '../components/note-card.component';
@@ -8,6 +8,7 @@ import { NotePayload } from '../models/payloads';
 import { MatCard, MatCardContent } from '@angular/material/card';
 import { MatDialog } from '@angular/material/dialog';
 import { NoteFormDialog } from '../components/note-form-dialog.component';
+import { NoteFormDialogOperation } from '../middleware/enum';
 
 @Component({
   selector: 'app-notes',
@@ -60,8 +61,17 @@ export class NotesPage {
       },
     });
 
-    dialogRef.afterClosed().subscribe(payload => {
-      if (payload) this.notesService.editNote(note.id, payload);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        switch (result.operation) {
+          case NoteFormDialogOperation.OnEdit:
+            this.notesService.editNote(note.id, result.payload);
+            break;
+          case NoteFormDialogOperation.OnDelete:
+            this.notesService.deleteNote(note.id);
+            break;
+        }
+      }
     });
   }
 }

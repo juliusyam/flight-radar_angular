@@ -62,4 +62,16 @@ export class FlightNotesService {
         this.notesSubject.next(notes);
       })
   }
+
+  deleteNote(noteId: number) {
+    this.httpClient.delete<Note>(`http://localhost:8000/api/notes/${ noteId }`, { headers: this.headers })
+      .subscribe(() => {
+        const notes = this.notesSubject.value;
+
+        const index = notes.findIndex(n => n.id === noteId);
+        if (index >= 0) notes.splice(index, 1);
+
+        this.notesSubject.next(notes);
+      })
+  }
 }
