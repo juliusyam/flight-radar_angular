@@ -3,6 +3,7 @@ import { BehaviorSubject } from 'rxjs';
 import { Note } from '../models/responses';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from './auth.service';
+import { NotePayload } from '../models/payloads';
 
 @Injectable()
 export class FlightNotesService {
@@ -32,5 +33,19 @@ export class FlightNotesService {
 
     this.httpClient.get<Note[]>(`http://localhost:8000/api/flights/${ flightId }/notes`, { headers: this.headers })
       .subscribe(notes => this.notesSubject.next(notes));
+  }
+
+  addNote(payload: NotePayload) {
+
+    if (this.currentFlightId == null) {
+      throw new Error('currentFlightId must be defined to create new note');
+    }
+
+    this.httpClient.post<Note>(`http://localhost:8000/api/notes`, { ...payload, flight_id: this.currentFlightId }, { headers: this.headers })
+      .subscribe(note => {
+        const notes = this.notesSubject.value;
+        notes.push(note);
+        this.notesSubject.next(notes);
+      });
   }
 }

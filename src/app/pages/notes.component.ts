@@ -3,10 +3,21 @@ import { FlightNotesService } from '../services/flight-notes.service';
 import { Note } from '../models/responses';
 import { NoteCard } from '../components/note-card.component';
 import { ActivatedRoute } from '@angular/router';
+import { NoteForm } from '../components/note-form.component';
+import { NotePayload } from '../models/payloads';
+import { MatCard, MatCardContent } from '@angular/material/card';
 
 @Component({
   selector: 'app-notes',
   template: `
+    <section style="margin-bottom: 2rem; display: grid; place-items: center;">
+      <mat-card appearance="outlined" style="width: 100%; max-width: 50rem;">
+        <mat-card-content>
+          <note-form (handleSubmit)="createNote($event)" />
+        </mat-card-content>
+      </mat-card>
+    </section>
+
     <section style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
       @for (note of notes; track note.id) {
         <note-card [note]="note" />
@@ -15,7 +26,10 @@ import { ActivatedRoute } from '@angular/router';
   `,
   standalone: true,
   imports: [
-    NoteCard
+    NoteCard,
+    NoteForm,
+    MatCard,
+    MatCardContent
   ]
 })
 export class NotesPage {
@@ -29,5 +43,9 @@ export class NotesPage {
     });
 
     this.notesService.notesObservable.subscribe(notes => this.notes = notes);
+  }
+
+  createNote(payload: NotePayload) {
+    this.notesService.addNote(payload);
   }
 }

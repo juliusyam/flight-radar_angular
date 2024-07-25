@@ -14,12 +14,12 @@ import { MatButton } from '@angular/material/button';
   template: `
     @if (flight) {
       <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem;">
-        <div>
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
           <flight-card [flight]="flight" />
 
           <br>
 
-          <h5>Notes</h5>
+          <h5 style="margin: 0;">Notes</h5>
 
           <section style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
             @for (note of notes; track note.id) {
@@ -27,7 +27,7 @@ import { MatButton } from '@angular/material/button';
             }
           </section>
 
-          <button mat-stroked-button (click)="viewNotes()">View Notes</button>
+          <button mat-stroked-button (click)="viewNotes()">View and Update Notes</button>
         </div>
         <flight-form [flight]="flight" (handleSubmit)="updateFlight($event)" />
       </div>

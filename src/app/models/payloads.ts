@@ -23,13 +23,16 @@ export interface FlightFormGroup {
   airline: FormControl<string>,
 }
 
-export interface NoteCreatePayload {
-  title: string,
-  body: string,
-  flight_id: number,
+export interface NoteCreatePayload extends NotePayload {
+  flight_id?: number,
 }
 
-export interface NoteEditPayload {
-  title: string,
-  body: string,
+export interface NotePayload {
+  title?: string,
+  body?: string,
+}
+
+export interface NoteFormGroup {
+  title: FormControl<string>,
+  body: FormControl<string>,
 }
