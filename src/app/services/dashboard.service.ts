@@ -52,4 +52,16 @@ export class DashboardService {
         this.flightsSubject.next(flights);
       });
   }
+
+  deleteFlight(flightId: number) {
+    this.httpClient.delete(`http://localhost:8000/api/flights/${ flightId }`, { headers: this.headers })
+      .subscribe(() => {
+        const flights = this.flightsSubject.value;
+
+        const index = flights.findIndex(f => f.id === flightId);
+        if (index >= 0) flights.splice(index, 1);
+
+        this.flightsSubject.next(flights);
+      });
+  }
 }

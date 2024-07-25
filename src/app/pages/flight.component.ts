@@ -29,7 +29,10 @@ import { MatButton } from '@angular/material/button';
 
           <button mat-stroked-button (click)="viewNotes()">View and Update Notes</button>
         </div>
-        <flight-form [flight]="flight" (handleSubmit)="updateFlight($event)" />
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+          <flight-form [flight]="flight" (handleSubmit)="updateFlight($event)" />
+          <button mat-stroked-button (click)="deleteFlight()">Delete Flight</button>
+        </div>
       </div>
     }
   `,
@@ -68,7 +71,11 @@ export class FlightDetailsPage {
   }
 
   updateFlight(payload: FlightPayload) {
-    if (this.flight?.id) this.dashboardService.editFlight(this.flight.id, payload);
+    if (this.flightId) this.dashboardService.editFlight(this.flightId, payload);
+  }
+
+  deleteFlight() {
+    if (this.flightId) this.dashboardService.deleteFlight(this.flightId);
   }
 
   viewNotes() {

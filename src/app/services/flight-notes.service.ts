@@ -64,7 +64,7 @@ export class FlightNotesService {
   }
 
   deleteNote(noteId: number) {
-    this.httpClient.delete<Note>(`http://localhost:8000/api/notes/${ noteId }`, { headers: this.headers })
+    this.httpClient.delete(`http://localhost:8000/api/notes/${ noteId }`, { headers: this.headers })
       .subscribe(() => {
         const notes = this.notesSubject.value;
 
