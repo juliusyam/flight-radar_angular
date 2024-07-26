@@ -58,13 +58,15 @@ export class DashboardService {
 
   addFlight(payload: FlightPayload) {
     this.httpClient.post<Flight>(environment.baseUrl + '/api/flights', payload, { headers: this.headers })
-      .subscribe(flight => {
-        const flights = this.flightsSubject.value;
+      .subscribe(flight => this.addFlightToList(flight));
+  }
 
-        flights.push(flight);
+  addFlightToList(flight: Flight) {
+    const flights = this.flightsSubject.value;
 
-        this.flightsSubject.next(flights);
-      });
+    flights.push(flight);
+
+    this.flightsSubject.next(flights);
   }
 
   editFlight(flightId: number, payload: FlightPayload) {

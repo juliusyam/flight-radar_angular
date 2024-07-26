@@ -2,6 +2,7 @@ import { EventEmitter, Injectable, Output } from '@angular/core';
 import { AuthService } from './auth.service';
 import Echo from 'laravel-echo';
 import { FlightResponse, UserResponse } from '../models/responses';
+import { DashboardService } from './dashboard.service';
 
 interface EchoEstablishment {
   echo: Echo,
@@ -26,7 +27,7 @@ export class EchoService {
 
   @Output() echoEstablished: EventEmitter<EchoEstablishment> = new EventEmitter<EchoEstablishment>();
 
-  constructor(private authService: AuthService) {
+  constructor(private authService: AuthService, private dashboardService: DashboardService) {
 
     this.authService.userProvided.subscribe(userResponse => {
       console.log("Echo Service received user", userResponse.user.id, userResponse.user.name);
@@ -37,6 +38,7 @@ export class EchoService {
       echo.private(`flights-private.${ userId }`)
         .listen('NewFlightAdded', (e: FlightResponse) => {
           console.log(e.flight);
+          this.dashboardService.addFlightToList(e.flight);
         })
         .listen('FlightUpdated', (e: FlightResponse) => {
           console.log(e.flight);
