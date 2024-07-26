@@ -1,8 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+
+$manrope-typography: mat.m2-define-typography-config(
+    $font-family: '"Manrope", sans-serif'
+);
+@include mat.typography-hierarchy($manrope-typography);
+@include mat.all-component-typographies($manrope-typography);
 
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: "Manrope", sans-serif;
   background: #171717;
   padding: 2rem;
 }
