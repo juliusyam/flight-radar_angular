@@ -10,10 +10,10 @@ import { environment } from '../../environments/environment';
 })
 export class AuthService {
 
-  constructor(private httpClient: HttpClient) {}
-
   @Output() userProvided: EventEmitter<UserResponse> = new EventEmitter<UserResponse>();
   @Output() userRemoved: EventEmitter<null> = new EventEmitter<null>();
+
+  constructor(private httpClient: HttpClient) {}
 
   login(payload: LoginPayload, onSuccess: (response: UserResponse) => void) {
     this.httpClient.post<UserResponse>(environment.baseUrl + '/api/login', payload)

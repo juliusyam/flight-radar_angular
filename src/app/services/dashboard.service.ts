@@ -19,6 +19,17 @@ export class DashboardService {
   private headers = new HttpHeaders();
 
   constructor(private httpClient: HttpClient, private authService: AuthService) {
+    // Initialise Dashboard On Load Application
+    const token = this.authService.getUser()?.token;
+    if (token) {
+      this.headers = new HttpHeaders({
+        'Authorization': `Bearer ${ token }`
+      });
+
+      this.initializeDashboard();
+    }
+
+    // Initialise Dashboard On Change User
     this.authService.userProvided.subscribe(userResponse => {
       const token = userResponse.token;
 

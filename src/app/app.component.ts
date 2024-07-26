@@ -3,6 +3,7 @@ import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { AuthService } from './services/auth.service';
 import { MatToolbar, MatToolbarRow } from '@angular/material/toolbar';
 import { MatButton } from '@angular/material/button';
+import { EchoService } from './services/echo.service';
 
 @Component({
   selector: 'app-root',
@@ -32,7 +33,11 @@ export class AppComponent {
 
   isAuthenticated = false;
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(
+    private authService: AuthService,
+    private echoService: EchoService,
+    private router: Router
+  ) {
     this.authService.userProvided.subscribe({
       next: () => this.isAuthenticated = true
     });
@@ -40,6 +45,8 @@ export class AppComponent {
     this.authService.userRemoved.subscribe({
       next: () => this.isAuthenticated = false
     });
+
+    this.echoService.start();
   }
 
   onLogout() {

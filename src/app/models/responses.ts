@@ -25,6 +25,10 @@ export interface Flight {
   user_id: number,
 }
 
+export interface FlightResponse {
+  flight: Flight,
+}
+
 export interface FlightStats {
   total_flights: number,
   total_distance: number,
