@@ -4,6 +4,7 @@ import { Note } from '../models/responses';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { NotePayload } from '../models/payloads';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class FlightNotesService {
@@ -31,7 +32,7 @@ export class FlightNotesService {
 
     console.log('Flight ID is:', flightId, this.currentFlightId);
 
-    this.httpClient.get<Note[]>(`http://localhost:8000/api/flights/${ flightId }/notes`, { headers: this.headers })
+    this.httpClient.get<Note[]>(environment.baseUrl + `/api/flights/${ flightId }/notes`, { headers: this.headers })
       .subscribe(notes => this.notesSubject.next(notes));
   }
 
@@ -41,7 +42,7 @@ export class FlightNotesService {
       throw new Error('currentFlightId must be defined to create new note');
     }
 
-    this.httpClient.post<Note>(`http://localhost:8000/api/notes`, { ...payload, flight_id: this.currentFlightId }, { headers: this.headers })
+    this.httpClient.post<Note>(environment.baseUrl + `/api/notes`, { ...payload, flight_id: this.currentFlightId }, { headers: this.headers })
       .subscribe(note => {
         const notes = this.notesSubject.value;
 
@@ -52,7 +53,7 @@ export class FlightNotesService {
   }
 
   editNote(noteId: number, payload: NotePayload) {
-    this.httpClient.put<Note>(`http://localhost:8000/api/notes/${ noteId }`, payload, { headers: this.headers })
+    this.httpClient.put<Note>(environment.baseUrl + `/api/notes/${ noteId }`, payload, { headers: this.headers })
       .subscribe(note => {
         const notes = this.notesSubject.value;
 
@@ -64,7 +65,7 @@ export class FlightNotesService {
   }
 
   deleteNote(noteId: number, onSuccess: () => void) {
-    this.httpClient.delete(`http://localhost:8000/api/notes/${ noteId }`, { headers: this.headers })
+    this.httpClient.delete(environment.baseUrl + `/api/notes/${ noteId }`, { headers: this.headers })
       .subscribe(() => {
         const notes = this.notesSubject.value;
 

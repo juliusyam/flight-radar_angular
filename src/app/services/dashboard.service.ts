@@ -4,6 +4,7 @@ import { Flight, FlightStats } from '../models/responses';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from './auth.service';
 import { FlightPayload } from '../models/payloads';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -23,15 +24,15 @@ export class DashboardService {
       'Authorization': `Bearer ${ token }`
     });
 
-    this.httpClient.get<Flight[]>('http://localhost:8000/api/flights', { headers: this.headers })
+    this.httpClient.get<Flight[]>(environment.baseUrl + '/api/flights', { headers: this.headers })
       .subscribe(flights => this.flightsSubject.next(flights));
 
-    this.httpClient.get<FlightStats>('http://localhost:8000/api/flight-stats', { headers: this.headers })
+    this.httpClient.get<FlightStats>(environment.baseUrl + '/api/flight-stats', { headers: this.headers })
       .subscribe(flightStats => this.flightStatsSubject.next(flightStats));
   }
 
   addFlight(payload: FlightPayload) {
-    this.httpClient.post<Flight>('http://localhost:8000/api/flights', payload, { headers: this.headers })
+    this.httpClient.post<Flight>(environment.baseUrl + '/api/flights', payload, { headers: this.headers })
       .subscribe(flight => {
         const flights = this.flightsSubject.value;
 
@@ -42,7 +43,7 @@ export class DashboardService {
   }
 
   editFlight(flightId: number, payload: FlightPayload) {
-    this.httpClient.put<Flight>(`http://localhost:8000/api/flights/${ flightId }`, payload, { headers: this.headers })
+    this.httpClient.put<Flight>(environment.baseUrl + `/api/flights/${ flightId }`, payload, { headers: this.headers })
       .subscribe(flight => {
         const flights = this.flightsSubject.value;
 
@@ -54,7 +55,7 @@ export class DashboardService {
   }
 
   deleteFlight(flightId: number, onSuccess:() => void) {
-    this.httpClient.delete(`http://localhost:8000/api/flights/${ flightId }`, { headers: this.headers })
+    this.httpClient.delete(environment.baseUrl + `/api/flights/${ flightId }`, { headers: this.headers })
       .subscribe(() => {
         const flights = this.flightsSubject.value;
 
