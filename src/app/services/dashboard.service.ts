@@ -18,17 +18,31 @@ export class DashboardService {
 
   private headers = new HttpHeaders();
 
-  constructor(private httpClient: HttpClient, authService: AuthService) {
-    const token = authService.getUser()?.token;
-    this.headers = new HttpHeaders({
-      'Authorization': `Bearer ${ token }`
+  constructor(private httpClient: HttpClient, private authService: AuthService) {
+    this.authService.userProvided.subscribe(userResponse => {
+      const token = userResponse.token;
+
+      this.headers = new HttpHeaders({
+        'Authorization': `Bearer ${ token }`
+      });
+
+      this.initializeDashboard();
     });
 
+    this.authService.userRemoved.subscribe(() => this.clearDashboard());
+  }
+
+  initializeDashboard() {
     this.httpClient.get<Flight[]>(environment.baseUrl + '/api/flights', { headers: this.headers })
       .subscribe(flights => this.flightsSubject.next(flights));
 
     this.httpClient.get<FlightStats>(environment.baseUrl + '/api/flight-stats', { headers: this.headers })
       .subscribe(flightStats => this.flightStatsSubject.next(flightStats));
+  }
+
+  clearDashboard() {
+    this.flightsSubject.next([]);
+    this.flightStatsSubject.next(null);
   }
 
   addFlight(payload: FlightPayload) {
