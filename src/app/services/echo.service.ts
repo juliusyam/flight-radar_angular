@@ -37,10 +37,22 @@ export class EchoService {
       echo.private(`flights-private.${ userId }`)
         .listen('NewFlightAdded', (e: FlightResponse) => {
           console.log(e.flight);
+        })
+        .listen('FlightUpdated', (e: FlightResponse) => {
+          console.log(e.flight);
+        })
+        .listen('FlightDeleted', (e: FlightResponse) => {
+          console.log(e.flight);
         });
 
       echo.channel('flights')
         .listen('NewFlightAdded', (e: FlightResponse) => {
+          console.log(e.flight);
+        })
+        .listen('FlightUpdated', (e: FlightResponse) => {
+          console.log(e.flight);
+        })
+        .listen('FlightDeleted', (e: FlightResponse) => {
           console.log(e.flight);
         });
     });
